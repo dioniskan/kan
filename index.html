@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тестовая страничка</title>
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .header {
+            background-color: #000;
+            color: #fff;
+            text-align: center;
+            width: 100%;
+            padding: 100px 0; /* Увеличен отступ для большей высоты */
+            box-sizing: border-box;
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            margin: 0;
+        }
+        .header p {
+            font-size: 1.2rem;
+            color: #ccc;
+            margin: 10px 0 0;
+        }
+        .content, .footer {
+            background-color: #333;
+            color: #fff;
+            padding: 50px 20px; /* Уменьшен отступ для меньшей высоты */
+            width: 100%;
+            box-sizing: border-box;
+            text-align: left;
+        }
+        .content h2 {
+            font-size: 1.8rem;
+            margin: 0 0 20px;
+            text-transform: none; /* Убраны заглавные буквы */
+        }
+        .content p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+        .footer {
+            background-color: #555; /* Более яркий фон */
+        }
+        .footer h2 {
+            font-size: 1.8rem;
+            margin: 0 0 10px;
+        }
+        .footer a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            .header p {
+                font-size: 1rem;
+            }
+            .content h2, .footer h2 {
+                font-size: 1.5rem;
+            }
+            .content p, .footer a {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>denis kan</h1>
+        <p>просто тестовая страничка</p>
+    </div>
+    <div class="content">
+        <h2>что, зачем?</h2>
+        <p>А просто попробовать. Стало интересно сделать такую страничку, может это перерастёт во что-то большее, а может надоест через 99 наносекунд и будет заброшено.</p>
+    </div>
+    <div class="footer">
+        <h2>Ссылки</h2>
+        <p><a href="https://t.me/+e7G65nv_e4c4ZjFi" target="_blank">ТГ канал</a></p>
+    </div>
+</body>
+</html>
