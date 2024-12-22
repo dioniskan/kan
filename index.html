@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Страничка Кана</title>
+    <!-- Добавляем favicon -->
+    <link rel="icon" href="source/images/kan-b.jpg" type="image/jpg">
     <style>
         body {
             font-family: 'Open Sans', sans-serif;
@@ -12,17 +14,15 @@
             overflow-x: hidden;
         }
         .image-section {
-            position: fixed;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background-color: #000;
-            z-index: -1; /* Картинка будет под блоками */
+            background-color: #000; /* Фон изначально черный */
+            position: relative;
+            z-index: 1; /* Картинка будет поверх блоков */
         }
         .image-section img {
             width: 500px;
@@ -30,6 +30,7 @@
             object-fit: cover;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: opacity 0.5s ease; /* Плавное исчезновение */
         }
         .overlay {
             position: absolute;
@@ -52,6 +53,7 @@
             justify-content: center;
             cursor: pointer;
             animation: bounce 1.5s infinite;
+            transition: opacity 0.5s ease; /* Плавное исчезновение */
         }
         .arrow-down::after {
             content: '↓';
@@ -69,16 +71,13 @@
                 transform: translateY(-5px);
             }
         }
-        .header, .content, .footer {
+        .header, .content, .who-block, .footer {
             width: 100%;
             box-sizing: border-box;
-            text-align: center;
             position: relative;
-            z-index: 1; /* Блоки будут поверх картинки */
+            z-index: 2; /* Блоки будут поверх картинки */
             padding: 60px 20px; /* Увеличен отступ для большей высоты */
             color: #fff;
-            transform: translateY(100vh); /* Начальное положение снизу */
-            transition: transform 0.8s ease; /* Ускорено движение блоков */
         }
         .header {
             background-color: #000;
@@ -87,39 +86,68 @@
         .content {
             background-color: #333;
         }
+        .who-block {
+            background-color: #444;
+        }
         .footer {
             background-color: #555;
+            overflow: hidden; /* Для анимации свечения */
         }
         .header h1 {
             font-size: 2.5rem;
             margin: 0;
+            text-align: center;
         }
         .header p {
             font-size: 1.2rem;
             color: #ccc;
             margin: 10px 0 0;
+            text-align: center;
         }
-        .content h2 {
+        .content h2, .who-block h2, .footer h2 {
             font-size: 1.8rem;
             margin: 0 0 20px;
             text-transform: none;
+            text-align: center;
         }
-        .content p {
+        .content p, .who-block p, .footer p {
             font-size: 1.2rem;
             line-height: 1.6;
-            margin: 0;
-        }
-        .footer h2 {
-            font-size: 1.8rem;
-            margin: 0 0 10px;
+            margin: 0 0 20px; /* Добавлен отступ между абзацами */
+            text-align: left;
         }
         .footer a {
             color: #fff;
             text-decoration: none;
             font-size: 1.2rem;
+            display: block;
+            text-align: center; /* Выравнивание текста по центру */
         }
         .footer a:hover {
             text-decoration: underline;
+        }
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .back-to-top.visible {
+            opacity: 1;
+        }
+        .back-to-top::after {
+            content: '↑';
+            font-size: 24px;
+            color: #000;
         }
         @media (max-width: 480px) {
             .image-section img {
@@ -132,10 +160,10 @@
             .header p {
                 font-size: 1rem;
             }
-            .content h2, .footer h2 {
+            .content h2, .who-block h2, .footer h2 {
                 font-size: 1.5rem;
             }
-            .content p, .footer a {
+            .content p, .who-block p, .footer p, .footer a {
                 font-size: 1rem;
             }
         }
@@ -161,20 +189,38 @@
         <p>А просто попробовать. Стало интересно сделать такую страничку. Скорее всего надоест через 256 наносекунд и будет заброшено 😁.</p>
     </div>
 
+    <!-- Новый блок (Who) -->
+    <div class="who-block">
+        <h2>кто?</h2>
+        <p>Ух, сложная тема самопознания внезапно врывается сюда.</p>
+        <p>Самое первое, что приходит на ум, когда я задаюсь вопросом "Кто я?" — это следующее: Кан Денис Владиславович. Родился 11 мая 1998 года. Мужчина. Кореец.</p>
+        <p>По сути, эта информация никак не влияет на то, что я из себя представляю и как себя ощущаю. Но стоило поинтересоваться происхождением и значением своих фамилии и имени, как сразу же начал не только примерять это на "прошлое" — свой жизненный опыт, но и простраивать образ, который, в свою очередь, влияет на будущее. Осознание своего возраста и, скорее, понимание того, как взгляды, принципы, цели, интересы и т.д. менялись и будут меняться с течением времени и накопления опыта, тоже играет важную роль.</p>
+        <p>Это уже не говоря о вопросах вроде: "Что значит быть корейцем?" и "Что значит быть мужчиной?"</p>
+        <p>Следующее, через что я пытаюсь себя понять и преподнести, — это работа. И ведь действительно: мы значительную часть жизни проводим за этой деятельностью. Она многое говорит о том, что мы умеем, и о том, как нас оценили другие люди. Работа помогает нам самим и новым знакомым понять нашу позицию в обществе. Она может рассказать о том, к чему мы стремились ранее, а иногда — о том, к чему движемся сейчас.</p>
+        <p>Затем идут хобби, интересы, умения, образование, достижения, экономическое состояние, политические взгляды. Эти темы обычно раскрываются не в процессе прямого самопрезентования, а постепенно, в ходе общения. И они тоже очень сильно влияют на ход разговора и построение взаимоотношений. Мы, узнавая то, какую музыку слушает человек, что смотрит или читает, какие у него увлечения и умения, где и как он учился, чего достиг и чем гордится, что думает о политике и т.д., достраиваем образ этого человека у себя в голове. И самое забавное — это всегда будет только образ. А печально то, что у многих в головах своё "Я" — это дико туманный и непонятный образ. Поэтому иногда важно остановиться и задуматься. Хотя бы о том, насколько вы сами себя понимаете.</p>
+        <p>Ну и, как вы могли догадаться, я ещё и "душнила". Или, как говорили про меня в детстве, "зануда".</p>
+    </div>
+
     <!-- Четвёртый блок (Footer) -->
     <div class="footer">
-        <h2>Ссылки</h2>
+        <h2>ссылки</h2>
         <p><a href="https://t.me/+e7G65nv_e4c4ZjFi" target="_blank">ТГ канал</a></p>
         <p><a href="mailto:deniskan11051998@gmail.com">Почта</a></p>
     </div>
 
+    <!-- Стрелочка "наверх" -->
+    <div class="back-to-top"></div>
+
     <script>
-        // Функция для затемнения картинки и движения блоков
+        // Функция для затемнения картинки и исчезновения стрелочки
         function revealContent() {
+            const imageSection = document.querySelector('.image-section');
+            const arrowDown = document.querySelector('.arrow-down');
             const overlay = document.querySelector('.overlay');
-            const sections = document.querySelectorAll('.header, .content, .footer');
+            const image = document.querySelector('.image-section img');
             const scrollPosition = window.scrollY;
             const windowHeight = window.innerHeight;
+            const imageSectionHeight = imageSection.offsetHeight;
 
             // Затемнение картинки
             if (scrollPosition > windowHeight / 2) {
@@ -183,20 +229,38 @@
                 overlay.style.backgroundColor = 'rgba(0, 0, 0, 0)';
             }
 
-            // Движение блоков вверх
-            if (scrollPosition > windowHeight) {
-                sections.forEach(section => {
-                    section.style.transform = 'translateY(0)';
-                });
+            // Исчезновение картинки и стрелочки
+            if (scrollPosition > 0 && scrollPosition <= imageSectionHeight) {
+                const progress = scrollPosition / imageSectionHeight;
+                image.style.opacity = `${1 - progress}`;
+                arrowDown.style.opacity = `${1 - progress}`;
+            } else if (scrollPosition > imageSectionHeight) {
+                image.style.opacity = '0';
+                arrowDown.style.opacity = '0';
             } else {
-                sections.forEach(section => {
-                    section.style.transform = 'translateY(100vh)';
-                });
+                image.style.opacity = '1';
+                arrowDown.style.opacity = '1';
             }
+
+            // Показ/скрытие стрелочки "наверх"
+            const backToTop = document.querySelector('.back-to-top');
+            if (scrollPosition > windowHeight) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        }
+
+        // Функция для возврата в начало страницы
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         // Добавляем обработчик события прокрутки
         window.addEventListener('scroll', revealContent);
+
+        // Добавляем обработчик события клика для стрелочки "наверх"
+        document.querySelector('.back-to-top').addEventListener('click', scrollToTop);
 
         // Вызываем функцию при загрузке страницы
         revealContent();
