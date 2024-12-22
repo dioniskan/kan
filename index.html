@@ -15,7 +15,7 @@
         }
         .image-section {
             width: 100%;
-            height: 100vh;
+            height: 70vh; /* Уменьшаем высоту */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -31,6 +31,7 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             transition: opacity 0.5s ease; /* Плавное исчезновение */
+            margin-top: -50px; /* Поднятие картинки */
         }
         .overlay {
             position: absolute;
@@ -43,7 +44,7 @@
         }
         .arrow-down {
             position: absolute;
-            bottom: 20px;
+            bottom: 10px; /* Поднятие стрелки */
             width: 40px;
             height: 40px;
             background-color: rgba(255, 255, 255, 0.8);
@@ -223,7 +224,7 @@
             const imageSectionHeight = imageSection.offsetHeight;
 
             // Затемнение картинки
-            if (scrollPosition > windowHeight / 2) {
+            if (scrollPosition > windowHeight / 4) { // Уменьшаем порог для затемнения
                 overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
             } else {
                 overlay.style.backgroundColor = 'rgba(0, 0, 0, 0)';
@@ -231,7 +232,7 @@
 
             // Исчезновение картинки и стрелочки
             if (scrollPosition > 0 && scrollPosition <= imageSectionHeight) {
-                const progress = scrollPosition / imageSectionHeight;
+                const progress = scrollPosition / (imageSectionHeight * 0.8); // Уменьшаем порог для исчезновения
                 image.style.opacity = `${1 - progress}`;
                 arrowDown.style.opacity = `${1 - progress}`;
             } else if (scrollPosition > imageSectionHeight) {
