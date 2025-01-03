@@ -152,12 +152,6 @@
             color: #fff;
             border: none;
         }
-        .pdf-viewer {
-            width: 100%;
-            height: 80vh;
-            border: none;
-            margin-top: 20px;
-        }
         @media (max-width: 480px) {
             .content input,
             .content textarea,
@@ -188,7 +182,7 @@
         <div class="tile" onclick="loadContent('what')">что, зачем?</div>
         <div class="tile" onclick="loadContent('who')">кто?</div>
         <!-- Второй ряд -->
-        <div class="tile" onclick="loadContent('resume')">резюме</div>
+        <div class="tile" onclick="window.open('source/other/Resume Kan Denis Vladislavovich (11.05.1998).pdf', '_blank')">скачать резюме</div>
         <div class="tile" onclick="loadContent('links')">ссылки</div>
         <!-- Третий ряд -->
         <div class="tile" onclick="loadContent('write')">написать мне</div>
@@ -204,16 +198,6 @@
     <div id="who" class="content hidden">
         <h2>кто?</h2>
         <div id="who-content"></div>
-        <a href="#" class="back-link" onclick="goBack()">Назад</a>
-    </div>
-
-    <div id="resume" class="content hidden">
-        <h2>резюме</h2>
-        <iframe
-            class="pdf-viewer"
-            src="source/other/Resume Kan Denis Vladislavovich (11.05.1998).pdf"
-            frameborder="0"
-        ></iframe>
         <a href="#" class="back-link" onclick="goBack()">Назад</a>
     </div>
 
