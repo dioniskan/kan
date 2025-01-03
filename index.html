@@ -182,7 +182,9 @@
         <div class="tile" onclick="loadContent('what')">что, зачем?</div>
         <div class="tile" onclick="loadContent('who')">кто?</div>
         <!-- Второй ряд -->
+        <div class="tile" onclick="loadResume()">резюме</div>
         <div class="tile" onclick="loadContent('links')">ссылки</div>
+        <!-- Третий ряд -->
         <div class="tile" onclick="loadContent('write')">написать мне</div>
     </div>
 
@@ -272,6 +274,11 @@
                     loadText('source/txt/who.txt', 'who-content');
                 }
             }
+        }
+
+        // Функция для загрузки резюме
+        function loadResume() {
+            window.open('source/other/Resume Kan Denis Vladislavovich (11.05.1998).pdf', '_blank');
         }
 
         // Функция для возврата на главную страницу с сохранением позиции прокрутки
