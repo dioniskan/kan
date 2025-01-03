@@ -131,6 +131,36 @@
         .hidden {
             display: none;
         }
+        .captcha {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .captcha label {
+            font-size: 1rem;
+            white-space: nowrap;
+        }
+        .captcha input {
+            width: 100px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: #444;
+            color: #fff;
+            border: none;
+        }
+        @media (max-width: 480px) {
+            .content input,
+            .content textarea,
+            .captcha {
+                width: 100%;
+            }
+            .captcha input {
+                width: calc(100% - 120px); /* Ширина поля с учётом текста капчи */
+            }
+        }
     </style>
 </head>
 <body>
@@ -174,7 +204,7 @@
             <input type="text" name="who" placeholder="кто" required><br>
             <textarea name="message" placeholder="чё" required></textarea><br>
             <div class="captcha">
-                <label for="captcha">капча: 7 * 2 - 1 = </label>
+                <label for="captcha">капча: 7*2-1=</label>
                 <input type="text" id="captcha" name="captcha" required>
             </div>
             <button type="submit">отправить</button>
