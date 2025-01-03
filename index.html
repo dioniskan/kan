@@ -6,43 +6,61 @@
     <title>Страничка Кана</title>
     <link rel="icon" href="source/images/kan-b.jpg" type="image/jpg">
     <style>
+        :root {
+            --bg-color: #000;
+            --text-color: #fff;
+            --secondary-color: #ccc;
+            --hover-color: #444;
+            --highlight-color: #ddd;
+        }
+
         body {
             font-family: 'Open Sans', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #000;
-            color: #fff;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             text-align: center;
         }
+
         .image-section {
-            width: 100%;
-            height: 70vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background-color: #000;
+            width: 100%;
+            height: 70vh;
+            background-color: var(--bg-color);
         }
+
         .image-section img {
             width: 500px;
             height: 500px;
             object-fit: cover;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
         }
+
+        .image-section img:hover {
+            transform: scale(1.05);
+        }
+
         .text-section {
             padding: 20px;
-            background-color: #000;
         }
+
         .text-section h1 {
             font-size: 2.5rem;
             margin: 0;
         }
+
         .text-section p {
             font-size: 1.2rem;
-            color: #ccc;
+            color: var(--secondary-color);
             margin: 10px 0 0;
         }
+
         .tiles {
             display: flex;
             justify-content: center;
@@ -50,162 +68,162 @@
             padding: 20px;
             flex-wrap: wrap;
         }
+
         .tile {
             background-color: #333;
             padding: 20px;
             border-radius: 10px;
             text-align: center;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: transform 0.3s ease, background-color 0.3s ease;
             width: 150px;
         }
+
         .tile:hover {
-            background-color: #444;
+            background-color: var(--hover-color);
+            transform: scale(1.1);
         }
+
         .content {
             padding: 60px 20px;
             max-width: 800px;
             margin: 0 auto;
             text-align: left;
         }
+
         .content h2 {
             font-size: 1.8rem;
             margin-bottom: 20px;
             text-align: center;
         }
+
         .content p {
             font-size: 1.2rem;
             line-height: 1.6;
             margin-bottom: 20px;
         }
+
         .content input,
         .content textarea {
-            width: calc(100% - 40px); /* Учитываем отступы */
+            width: calc(100% - 40px);
             padding: 10px;
-            margin: 0 20px 15px; /* Отступы слева и справа */
-            border: 1px solid #ccc;
+            margin: 0 20px 15px;
             border-radius: 5px;
             font-size: 1rem;
-            background-color: #444;
-            color: #fff;
+            background-color: var(--hover-color);
+            color: var(--text-color);
             border: none;
         }
+
         .content textarea {
             height: 150px;
             resize: vertical;
         }
+
         .content button {
             padding: 10px 20px;
             font-size: 1rem;
-            background-color: #fff;
-            color: #000;
+            background-color: var(--text-color);
+            color: var(--bg-color);
             border: none;
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            margin: 0 20px; /* Отступы слева и справа */
+            margin: 0 20px;
         }
+
         .content button:hover {
-            background-color: #ddd;
+            background-color: var(--highlight-color);
         }
+
         .content a {
-            color: #fff;
+            color: var(--text-color);
             text-decoration: none;
             font-size: 1.2rem;
             display: block;
             margin-bottom: 10px;
         }
+
         .content a:hover {
             text-decoration: underline;
         }
+
         .back-link {
             display: block;
             text-align: center;
             margin-top: 20px;
-            color: #fff;
+            color: var(--text-color);
             text-decoration: none;
             font-size: 1.2rem;
         }
+
         .back-link:hover {
             text-decoration: underline;
         }
+
         .hidden {
             display: none;
         }
+
         .captcha {
             display: flex;
             align-items: center;
             gap: 10px;
-            margin: 0 20px 15px; /* Отступы слева и справа */
+            margin: 0 20px 15px;
         }
-        .captcha label {
-            font-size: 1rem;
-            white-space: nowrap;
-        }
+
         .captcha input {
             width: 100px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1rem;
-            background-color: #444;
-            color: #fff;
-            border: none;
         }
+
         @media (max-width: 480px) {
             .content input,
             .content textarea,
             .captcha {
-                width: calc(100% - 40px); /* Учитываем отступы */
+                width: calc(100% - 40px);
             }
+
             .captcha input {
-                width: calc(100% - 120px); /* Ширина поля с учётом текста капчи */
+                width: calc(100% - 120px);
             }
         }
     </style>
 </head>
 <body>
-    <!-- Первый блок с картинкой -->
-    <div class="image-section">
+    <section class="image-section">
         <img src="source/images/kan-b.jpg" alt="Картинка">
-    </div>
+    </section>
 
-    <!-- Текстовый блок -->
-    <div class="text-section">
+    <section class="text-section">
         <h1>denis kan</h1>
         <p>просто тестовая страничка</p>
-    </div>
+    </section>
 
-    <!-- Плитки -->
-    <div class="tiles">
-        <!-- Первый ряд -->
+    <section class="tiles">
         <div class="tile" onclick="loadContent('what')">что, зачем?</div>
         <div class="tile" onclick="loadContent('who')">кто?</div>
-        <!-- Второй ряд -->
         <div class="tile" onclick="window.open('source/other/Resume Kan Denis Vladislavovich (11.05.1998).pdf', '_blank')">скачать резюме</div>
         <div class="tile" onclick="loadContent('links')">ссылки</div>
-        <!-- Третий ряд -->
         <div class="tile" onclick="loadContent('write')">написать мне</div>
-    </div>
+    </section>
 
-    <!-- Контентные блоки -->
-    <div id="what" class="content hidden">
+    <article id="what" class="content hidden">
         <h2>что, зачем?</h2>
         <div id="what-content"></div>
         <a href="#" class="back-link" onclick="goBack()">Назад</a>
-    </div>
+    </article>
 
-    <div id="who" class="content hidden">
+    <article id="who" class="content hidden">
         <h2>кто?</h2>
         <div id="who-content"></div>
         <a href="#" class="back-link" onclick="goBack()">Назад</a>
-    </div>
+    </article>
 
-    <div id="write" class="content hidden">
+    <article id="write" class="content hidden">
         <h2>написать мне</h2>
         <form id="telegramForm">
-            <input type="text" name="who" placeholder="кто" required><br>
-            <textarea name="message" placeholder="чё" required></textarea><br>
+            <input type="text" name="who" placeholder="кто" required>
+            <textarea name="message" placeholder="чё" required></textarea>
             <div class="captcha">
                 <label for="captcha">капча: 7*2-1=</label>
                 <input type="text" id="captcha" name="captcha" required>
@@ -213,31 +231,28 @@
             <button type="submit">отправить</button>
         </form>
         <a href="#" class="back-link" onclick="goBack()">Назад</a>
-    </div>
+    </article>
 
-    <div id="links" class="content hidden">
+    <article id="links" class="content hidden">
         <h2>ссылки</h2>
-        <a href="https://t.me/+e7G65nv_e4c4ZjFi" target="_blank">ТГ канал</a><br>
-        <a href="mailto:deniskan11051998@gmail.com">Почта</a><br>
+        <a href="https://t.me/+e7G65nv_e4c4ZjFi" target="_blank">ТГ канал</a>
+        <a href="mailto:deniskan11051998@gmail.com">Почта</a>
         <a href="#" class="back-link" onclick="goBack()">Назад</a>
-    </div>
+    </article>
 
     <script>
-        // Сохраняем позицию прокрутки
         let scrollPosition = 0;
 
-        // Функция для загрузки текста из файла
         async function loadText(filePath, elementId) {
             try {
                 const response = await fetch(filePath);
                 if (!response.ok) throw new Error('Ошибка загрузки файла');
                 const text = await response.text();
-                
-                // Заменяем пустые строки на <br>
+
                 const formattedText = text
-                    .split('\n') // Разделяем текст по строкам
-                    .map(line => line.trim() === '' ? '<br>' : line) // Заменяем пустые строки на <br>
-                    .join('<br>'); // Соединяем строки с <br>
+                    .split('\n')
+                    .map(line => line.trim() === '' ? '<br>' : line)
+                    .join('<br>');
 
                 document.getElementById(elementId).innerHTML = formattedText;
             } catch (error) {
@@ -246,17 +261,11 @@
             }
         }
 
-        // Функция для загрузки контента
         function loadContent(page) {
-            // Сохраняем текущую позицию прокрутки
             scrollPosition = window.scrollY;
 
-            // Скрываем все контентные блоки
-            document.querySelectorAll('.content').forEach(function(el) {
-                el.classList.add('hidden');
-            });
+            document.querySelectorAll('.content').forEach(el => el.classList.add('hidden'));
 
-            // Показываем нужный блок
             if (page === 'main') {
                 document.querySelector('.image-section').style.display = 'flex';
                 document.querySelector('.text-section').style.display = 'block';
@@ -267,7 +276,6 @@
                 document.querySelector('.tiles').style.display = 'none';
                 document.getElementById(page).classList.remove('hidden');
 
-                // Загружаем текст для страниц "что, зачем?" и "кто?"
                 if (page === 'what') {
                     loadText('source/txt/what.txt', 'what-content');
                 } else if (page === 'who') {
@@ -276,13 +284,11 @@
             }
         }
 
-        // Функция для возврата на главную страницу с сохранением позиции прокрутки
         function goBack() {
             loadContent('main');
             window.scrollTo(0, scrollPosition);
         }
 
-        // Обработчик отправки формы
         document.getElementById('telegramForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
@@ -295,13 +301,13 @@
             const who = document.querySelector('input[name="who"]').value;
             const message = document.querySelector('textarea[name="message"]').value;
 
-            const text = `Господин Кан! Вам сообщение от *${who}*.\n\n${message}`;
+            const text = `Господин Кан! Вам сообщение от *${who}*.
+
+${message}`;
 
             fetch(`https://api.telegram.org/bot8065450134:AAG-ddB-us3DxGSQnoAuYH6kBnapG448dak/sendMessage`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     chat_id: '430173926',
                     text: text,
@@ -311,7 +317,7 @@
               .then(data => {
                   if (data.ok) {
                       alert('Сообщение отправлено!');
-                      window.location.reload(); // Перезагрузка страницы
+                      window.location.reload();
                   } else {
                       alert('Ошибка при отправке сообщения.');
                   }
