@@ -4,25 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Страничка Кана</title>
-    <!-- Добавляем favicon -->
     <link rel="icon" href="source/images/kan-b.jpg" type="image/jpg">
     <style>
         body {
             font-family: 'Open Sans', sans-serif;
             margin: 0;
             padding: 0;
-            overflow-x: hidden;
+            background-color: #000;
+            color: #fff;
+            text-align: center;
         }
         .image-section {
             width: 100%;
-            height: 70vh; /* Уменьшаем высоту */
+            height: 70vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background-color: #000; /* Фон изначально черный */
-            position: relative;
-            z-index: 1; /* Картинка будет поверх блоков */
+            background-color: #000;
         }
         .image-section img {
             width: 500px;
@@ -30,83 +29,58 @@
             object-fit: cover;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: opacity 0.5s ease; /* Плавное исчезновение */
-            margin-top: -50px; /* Поднятие картинки */
         }
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0); /* Изначально прозрачный */
-            transition: background-color 1s ease; /* Плавное затемнение */
-        }
-        .arrow-down {
-            position: absolute;
-            bottom: 10px; /* Поднятие стрелки */
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            animation: bounce 1.5s infinite;
-            transition: opacity 0.5s ease; /* Плавное исчезновение */
-        }
-        .arrow-down::after {
-            content: '↓';
-            font-size: 24px;
-            color: #000;
-        }
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-10px);
-            }
-            60% {
-                transform: translateY(-5px);
-            }
-        }
-        .header, .content, .who-block, .footer, .contact-form {
-            width: 100%;
-            box-sizing: border-box;
-            position: relative;
-            z-index: 2; /* Блоки будут поверх картинки */
-            padding: 60px 20px; /* Увеличен отступ для большей высоты */
-            color: #fff;
-        }
-        .header {
+        .text-section {
+            padding: 20px;
             background-color: #000;
-            padding: 120px 20px; /* Увеличен отступ для большей высоты */
         }
-        .content {
+        .text-section h1 {
+            font-size: 2.5rem;
+            margin: 0;
+        }
+        .text-section p {
+            font-size: 1.2rem;
+            color: #ccc;
+            margin: 10px 0 0;
+        }
+        .tiles {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+            flex-wrap: wrap;
+        }
+        .tile {
             background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 150px;
         }
-        .who-block {
+        .tile:hover {
             background-color: #444;
         }
-        .footer {
-            background-color: #555;
-            overflow: hidden; /* Для анимации свечения */
+        .content {
+            padding: 60px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
         }
-        .contact-form {
-            background-color: #666;
-            text-align: center;
-        }
-        .contact-form h2 {
+        .content h2 {
             font-size: 1.8rem;
             margin-bottom: 20px;
-            text-transform: none;
+            text-align: center;
         }
-        .contact-form input,
-        .contact-form textarea {
-            width: 80%;
-            max-width: 500px;
+        .content p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .content input,
+        .content textarea {
+            width: 100%;
             padding: 10px;
             margin-bottom: 15px;
             border: 1px solid #ccc;
@@ -116,32 +90,11 @@
             color: #fff;
             border: none;
         }
-        .contact-form textarea {
+        .content textarea {
             height: 150px;
             resize: vertical;
         }
-        .contact-form .captcha {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        .contact-form .captcha label {
-            font-size: 1rem;
-            white-space: nowrap;
-        }
-        .contact-form .captcha input {
-            width: 100px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1rem;
-            background-color: #444;
-            color: #fff;
-            border: none;
-        }
-        .contact-form button {
+        .content button {
             padding: 10px 20px;
             font-size: 1rem;
             background-color: #fff;
@@ -151,82 +104,32 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-        .contact-form button:hover {
+        .content button:hover {
             background-color: #ddd;
         }
-        .header h1 {
-            font-size: 2.5rem;
-            margin: 0;
-            text-align: center;
-        }
-        .header p {
-            font-size: 1.2rem;
-            color: #ccc;
-            margin: 10px 0 0;
-            text-align: center;
-        }
-        .content h2, .who-block h2, .footer h2 {
-            font-size: 1.8rem;
-            margin: 0 0 20px;
-            text-transform: none;
-            text-align: center;
-        }
-        .content p, .who-block p, .footer p {
-            font-size: 1.2rem;
-            line-height: 1.6;
-            margin: 0 0 20px; /* Добавлен отступ между абзацами */
-            text-align: left;
-        }
-        .footer a {
+        .content a {
             color: #fff;
             text-decoration: none;
             font-size: 1.2rem;
             display: block;
-            text-align: center; /* Выравнивание текста по центру */
+            margin-bottom: 10px;
         }
-        .footer a:hover {
+        .content a:hover {
             text-decoration: underline;
         }
-        .back-to-top {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.2rem;
         }
-        .back-to-top.visible {
-            opacity: 1;
+        .back-link:hover {
+            text-decoration: underline;
         }
-        .back-to-top::after {
-            content: '↑';
-            font-size: 24px;
-            color: #000;
-        }
-        @media (max-width: 480px) {
-            .image-section img {
-                width: 90%;
-                height: auto;
-            }
-            .header h1 {
-                font-size: 2rem;
-            }
-            .header p {
-                font-size: 1rem;
-            }
-            .content h2, .who-block h2, .footer h2 {
-                font-size: 1.5rem;
-            }
-            .content p, .who-block p, .footer p, .footer a {
-                font-size: 1rem;
-            }
+        .hidden {
+            display: none;
         }
     </style>
 </head>
@@ -234,43 +137,38 @@
     <!-- Первый блок с картинкой -->
     <div class="image-section">
         <img src="source/images/kan-b.jpg" alt="Картинка">
-        <div class="overlay"></div> <!-- Затемнение -->
-        <div class="arrow-down"></div> <!-- Стрелочка вниз -->
     </div>
 
-    <!-- Второй блок (Header) -->
-    <div class="header">
+    <!-- Текстовый блок -->
+    <div class="text-section">
         <h1>denis kan</h1>
         <p>просто тестовая страничка</p>
     </div>
 
-    <!-- Третий блок (Content) -->
-    <div class="content">
+    <!-- Плитки -->
+    <div class="tiles">
+        <!-- Первый ряд -->
+        <div class="tile" onclick="loadContent('what')">что, зачем?</div>
+        <div class="tile" onclick="loadContent('who')">кто?</div>
+        <!-- Второй ряд -->
+        <div class="tile" onclick="loadContent('links')">ссылки</div>
+        <div class="tile" onclick="loadContent('write')">написать мне</div>
+    </div>
+
+    <!-- Контентные блоки -->
+    <div id="what" class="content hidden">
         <h2>что, зачем?</h2>
-        <p>А просто попробовать. Стало интересно сделать такую страничку. Скорее всего надоест через 256 наносекунд и будет заброшено 😁.</p>
+        <div id="what-content"></div>
+        <a href="#" class="back-link" onclick="loadContent('main')">Назад</a>
     </div>
 
-    <!-- Новый блок (Who) -->
-    <div class="who-block">
+    <div id="who" class="content hidden">
         <h2>кто?</h2>
-        <p>Ух, сложная тема самопознания внезапно врывается сюда.</p>
-        <p>Самое первое, что приходит на ум, когда я задаюсь вопросом "Кто я?" — это следующее: Кан Денис Владиславович. Родился 11 мая 1998 года. Мужчина. Кореец.</p>
-        <p>По сути, эта информация никак не влияет на то, что я из себя представляю и как себя ощущаю. Но стоило поинтересоваться происхождением и значением своих фамилии и имени, как сразу же начал не только примерять это на "прошлое" — свой жизненный опыт, но и простраивать образ, который, в свою очередь, влияет на будущее. Осознание своего возраста и, скорее, понимание того, как взгляды, принципы, цели, интересы и т.д. менялись и будут меняться с течением времени и накопления опыта, тоже играет важную роль.</p>
-        <p>Это уже не говоря о вопросах вроде: "Что значит быть корейцем?" и "Что значит быть мужчиной?"</p>
-        <p>Следующее, через что я пытаюсь себя понять и преподнести, — это работа. И ведь действительно: мы значительную часть жизни проводим за этой деятельностью. Она многое говорит о том, что мы умеем, и о том, как нас оценили другие люди. Работа помогает нам самим и новым знакомым понять нашу позицию в обществе. Она может рассказать о том, к чему мы стремились ранее, а иногда — о том, к чему движемся сейчас.</p>
-        <p>Затем идут хобби, интересы, умения, образование, достижения, экономическое состояние, политические взгляды. Эти темы обычно раскрываются не в процессе прямого самопрезентования, а постепенно, в ходе общения. И они тоже очень сильно влияют на ход разговора и построение взаимоотношений. Мы, узнавая то, какую музыку слушает человек, что смотрит или читает, какие у него увлечения и умения, где и как он учился, чего достиг и чем гордится, что думает о политике и т.д., достраиваем образ этого человека у себя в голове. И самое забавное — это всегда будет только образ. А печально то, что у многих в головах своё "Я" — это дико туманный и непонятный образ. Поэтому иногда важно остановиться и задуматься. Хотя бы о том, насколько вы сами себя понимаете.</p>
-        <p>Ну и, как вы могли догадаться, я ещё и "душнила". Или, как говорили про меня в детстве, "зануда".</p>
+        <div id="who-content"></div>
+        <a href="#" class="back-link" onclick="loadContent('main')">Назад</a>
     </div>
 
-    <!-- Четвёртый блок (Footer) -->
-    <div class="footer">
-        <h2>ссылки</h2>
-        <p><a href="https://t.me/+e7G65nv_e4c4ZjFi" target="_blank">ТГ канал</a></p>
-        <p><a href="mailto:deniskan11051998@gmail.com">Почта</a></p>
-    </div>
-
-    <!-- Блок "Написать мне" -->
-    <div class="contact-form">
+    <div id="write" class="content hidden">
         <h2>написать мне</h2>
         <form id="telegramForm">
             <input type="text" name="who" placeholder="кто" required><br>
@@ -281,102 +179,87 @@
             </div>
             <button type="submit">отправить</button>
         </form>
+        <a href="#" class="back-link" onclick="loadContent('main')">Назад</a>
     </div>
 
-    <!-- Стрелочка "наверх" -->
-    <div class="back-to-top"></div>
+    <div id="links" class="content hidden">
+        <h2>ссылки</h2>
+        <a href="https://t.me/+e7G65nv_e4c4ZjFi" target="_blank">ТГ канал</a><br>
+        <a href="mailto:deniskan11051998@gmail.com">Почта</a><br>
+        <a href="#" class="back-link" onclick="loadContent('main')">Назад</a>
+    </div>
 
     <script>
-        // Функция для затемнения картинки и исчезновения стрелочки
-        function revealContent() {
-            const imageSection = document.querySelector('.image-section');
-            const arrowDown = document.querySelector('.arrow-down');
-            const overlay = document.querySelector('.overlay');
-            const image = document.querySelector('.image-section img');
-            const scrollPosition = window.scrollY;
-            const windowHeight = window.innerHeight;
-            const imageSectionHeight = imageSection.offsetHeight;
-
-            // Затемнение картинки
-            if (scrollPosition > windowHeight / 4) { // Уменьшаем порог для затемнения
-                overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-            } else {
-                overlay.style.backgroundColor = 'rgba(0, 0, 0, 0)';
-            }
-
-            // Исчезновение картинки и стрелочки
-            if (scrollPosition > 0 && scrollPosition <= imageSectionHeight) {
-                const progress = scrollPosition / (imageSectionHeight * 0.8); // Уменьшаем порог для исчезновения
-                image.style.opacity = `${1 - progress}`;
-                arrowDown.style.opacity = `${1 - progress}`;
-            } else if (scrollPosition > imageSectionHeight) {
-                image.style.opacity = '0';
-                arrowDown.style.opacity = '0';
-            } else {
-                image.style.opacity = '1';
-                arrowDown.style.opacity = '1';
-            }
-
-            // Показ/скрытие стрелочки "наверх"
-            const backToTop = document.querySelector('.back-to-top');
-            if (scrollPosition > windowHeight) {
-                backToTop.classList.add('visible');
-            } else {
-                backToTop.classList.remove('visible');
+        // Функция для загрузки текста из файла
+        async function loadText(filePath, elementId) {
+            try {
+                const response = await fetch(filePath);
+                if (!response.ok) throw new Error('Ошибка загрузки файла');
+                const text = await response.text();
+                document.getElementById(elementId).innerHTML = text.replace(/\n/g, '<br>');
+            } catch (error) {
+                console.error('Ошибка:', error);
+                document.getElementById(elementId).innerHTML = 'Ошибка загрузки текста.';
             }
         }
 
-        // Функция для возврата в начало страницы
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Функция для загрузки контента
+        function loadContent(page) {
+            // Скрываем все контентные блоки
+            document.querySelectorAll('.content').forEach(function(el) {
+                el.classList.add('hidden');
+            });
+
+            // Показываем нужный блок
+            if (page === 'main') {
+                document.querySelector('.image-section').style.display = 'flex';
+                document.querySelector('.text-section').style.display = 'block';
+                document.querySelector('.tiles').style.display = 'flex';
+            } else {
+                document.querySelector('.image-section').style.display = 'none';
+                document.querySelector('.text-section').style.display = 'none';
+                document.querySelector('.tiles').style.display = 'none';
+                document.getElementById(page).classList.remove('hidden');
+
+                // Загружаем текст для страниц "что, зачем?" и "кто?"
+                if (page === 'what') {
+                    loadText('source/txt/what.txt', 'what-content');
+                } else if (page === 'who') {
+                    loadText('source/txt/who.txt', 'who-content');
+                }
+            }
         }
-
-        // Добавляем обработчик события прокрутки
-        window.addEventListener('scroll', revealContent);
-
-        // Добавляем обработчик события клика для стрелочки "наверх"
-        document.querySelector('.back-to-top').addEventListener('click', scrollToTop);
-
-        // Вызываем функцию при загрузке страницы
-        revealContent();
-
-        // Токен вашего бота и ваш chat_id
-        const botToken = '8065450134:AAG-ddB-us3DxGSQnoAuYH6kBnapG448dak'; // Токен бота
-        const chatId = '430173926'; // Ваш chat_id
 
         // Обработчик отправки формы
         document.getElementById('telegramForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Отменяем стандартную отправку формы
+            event.preventDefault();
 
-            // Получаем данные из формы
-            const who = document.querySelector('input[name="who"]').value;
-            const message = document.querySelector('textarea[name="message"]').value;
             const captcha = document.querySelector('input[name="captcha"]').value;
-
-            // Проверка капчи
             if (captcha !== '13') {
                 alert('Ошибка: Неправильно введена капча.');
                 return;
             }
 
-            // Формируем текст сообщения с жирным шрифтом для "кто"
+            const who = document.querySelector('input[name="who"]').value;
+            const message = document.querySelector('textarea[name="message"]').value;
+
             const text = `Господин Кан! Вам сообщение от *${who}*.\n\n${message}`;
 
-            // Отправляем сообщение через Telegram API
-            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+            fetch(`https://api.telegram.org/bot8065450134:AAG-ddB-us3DxGSQnoAuYH6kBnapG448dak/sendMessage`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    chat_id: chatId,
+                    chat_id: '430173926',
                     text: text,
-                    parse_mode: 'Markdown' // Для жирного текста
+                    parse_mode: 'Markdown'
                 })
             }).then(response => response.json())
               .then(data => {
                   if (data.ok) {
                       alert('Сообщение отправлено!');
+                      window.location.reload(); // Перезагрузка страницы
                   } else {
                       alert('Ошибка при отправке сообщения.');
                   }
