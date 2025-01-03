@@ -80,9 +80,9 @@
         }
         .content input,
         .content textarea {
-            width: 100%;
+            width: calc(100% - 40px); /* Учитываем отступы */
             padding: 10px;
-            margin-bottom: 15px;
+            margin: 0 20px 15px; /* Отступы слева и справа */
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 1rem;
@@ -103,6 +103,7 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            margin: 0 20px; /* Отступы слева и справа */
         }
         .content button:hover {
             background-color: #ddd;
@@ -135,7 +136,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 15px;
+            margin: 0 20px 15px; /* Отступы слева и справа */
         }
         .captcha label {
             font-size: 1rem;
@@ -155,7 +156,7 @@
             .content input,
             .content textarea,
             .captcha {
-                width: 100%;
+                width: calc(100% - 40px); /* Учитываем отступы */
             }
             .captcha input {
                 width: calc(100% - 120px); /* Ширина поля с учётом текста капчи */
@@ -189,13 +190,13 @@
     <div id="what" class="content hidden">
         <h2>что, зачем?</h2>
         <div id="what-content"></div>
-        <a href="#" class="back-link" onclick="loadContent('main')">Назад</a>
+        <a href="#" class="back-link" onclick="goBack()">Назад</a>
     </div>
 
     <div id="who" class="content hidden">
         <h2>кто?</h2>
         <div id="who-content"></div>
-        <a href="#" class="back-link" onclick="loadContent('main')">Назад</a>
+        <a href="#" class="back-link" onclick="goBack()">Назад</a>
     </div>
 
     <div id="write" class="content hidden">
@@ -209,24 +210,34 @@
             </div>
             <button type="submit">отправить</button>
         </form>
-        <a href="#" class="back-link" onclick="loadContent('main')">Назад</a>
+        <a href="#" class="back-link" onclick="goBack()">Назад</a>
     </div>
 
     <div id="links" class="content hidden">
         <h2>ссылки</h2>
         <a href="https://t.me/+e7G65nv_e4c4ZjFi" target="_blank">ТГ канал</a><br>
         <a href="mailto:deniskan11051998@gmail.com">Почта</a><br>
-        <a href="#" class="back-link" onclick="loadContent('main')">Назад</a>
+        <a href="#" class="back-link" onclick="goBack()">Назад</a>
     </div>
 
     <script>
+        // Сохраняем позицию прокрутки
+        let scrollPosition = 0;
+
         // Функция для загрузки текста из файла
         async function loadText(filePath, elementId) {
             try {
                 const response = await fetch(filePath);
                 if (!response.ok) throw new Error('Ошибка загрузки файла');
                 const text = await response.text();
-                document.getElementById(elementId).innerHTML = text.replace(/\n/g, '<br>');
+                
+                // Заменяем пустые строки на <br>
+                const formattedText = text
+                    .split('\n') // Разделяем текст по строкам
+                    .map(line => line.trim() === '' ? '<br>' : line) // Заменяем пустые строки на <br>
+                    .join('<br>'); // Соединяем строки с <br>
+
+                document.getElementById(elementId).innerHTML = formattedText;
             } catch (error) {
                 console.error('Ошибка:', error);
                 document.getElementById(elementId).innerHTML = 'Ошибка загрузки текста.';
@@ -235,6 +246,9 @@
 
         // Функция для загрузки контента
         function loadContent(page) {
+            // Сохраняем текущую позицию прокрутки
+            scrollPosition = window.scrollY;
+
             // Скрываем все контентные блоки
             document.querySelectorAll('.content').forEach(function(el) {
                 el.classList.add('hidden');
@@ -258,6 +272,12 @@
                     loadText('source/txt/who.txt', 'who-content');
                 }
             }
+        }
+
+        // Функция для возврата на главную страницу с сохранением позиции прокрутки
+        function goBack() {
+            loadContent('main');
+            window.scrollTo(0, scrollPosition);
         }
 
         // Обработчик отправки формы
