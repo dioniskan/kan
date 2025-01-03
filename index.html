@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Страничка Кана</title>
+    <title>Страничка кана</title>
     <link rel="icon" href="source/images/kan-b.jpg" type="image/jpg">
     <style>
         :root {
@@ -12,6 +12,7 @@
             --secondary-color: #ccc;
             --hover-color: #444;
             --highlight-color: #ddd;
+            --border-color: #666; /* Новый цвет для границ */
         }
 
         body {
@@ -129,7 +130,8 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            margin: 0 20px;
+            margin: 0 auto; /* Центрирование кнопки */
+            display: block; /* Чтобы кнопка занимала всю ширину */
         }
 
         .content button:hover {
@@ -176,6 +178,55 @@
             width: 100px;
         }
 
+        .limit-message {
+            font-size: 0.9rem;
+            color: red;
+            margin-left: 20px;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--highlight-color);
+            color: var(--bg-color);
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 1000;
+        }
+
+        /* Новые стили для блоков на странице "связь" */
+        .contact-block {
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .contact-block h2 {
+            margin-top: 0;
+        }
+
+        .tg-block {
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .tg-block a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+
+        .tg-block a:hover {
+            text-decoration: underline;
+        }
+
         @media (max-width: 480px) {
             .content input,
             .content textarea,
@@ -202,43 +253,46 @@
     <section class="tiles">
         <div class="tile" onclick="loadContent('what')">что, зачем?</div>
         <div class="tile" onclick="loadContent('who')">кто?</div>
-        <div class="tile" onclick="window.open('source/other/Resume Kan Denis Vladislavovich (11.05.1998).pdf', '_blank')">скачать резюме</div>
-        <div class="tile" onclick="loadContent('links')">ссылки</div>
-        <div class="tile" onclick="loadContent('write')">написать мне</div>
+        <div class="tile" onclick="window.open('source/other/Resume Kan Denis Vladislavovich (11.05.1998).pdf', '_blank')">резюме</div>
+        <div class="tile" onclick="loadContent('contact')">связь</div>
     </section>
 
     <article id="what" class="content hidden">
         <h2>что, зачем?</h2>
         <div id="what-content"></div>
-        <a href="#" class="back-link" onclick="goBack()">Назад</a>
+        <a href="#" class="back-link" onclick="goBack()">назад</a>
     </article>
 
     <article id="who" class="content hidden">
         <h2>кто?</h2>
         <div id="who-content"></div>
-        <a href="#" class="back-link" onclick="goBack()">Назад</a>
+        <a href="#" class="back-link" onclick="goBack()">назад</a>
     </article>
 
-    <article id="write" class="content hidden">
-        <h2>написать мне</h2>
-        <form id="telegramForm">
-            <input type="text" name="who" placeholder="кто" required>
-            <textarea name="message" placeholder="чё" required></textarea>
-            <div class="captcha">
-                <label for="captcha">капча: 7*2-1=</label>
-                <input type="text" id="captcha" name="captcha" required>
-            </div>
-            <button type="submit">отправить</button>
-        </form>
-        <a href="#" class="back-link" onclick="goBack()">Назад</a>
+    <article id="contact" class="content hidden">
+        <div class="contact-block">
+            <h2>связь</h2>
+            <form id="telegramForm">
+                <input type="text" name="who" placeholder="кто" required>
+                <textarea name="message" placeholder="чё" maxlength="300" required></textarea>
+                <div class="limit-message hidden">хвитит</div>
+                <div class="captcha">
+                    <label for="captcha">капча: 7*2-1=</label>
+                    <input type="text" id="captcha" name="captcha" required>
+                </div>
+                <button type="submit">отправить</button>
+            </form>
+        </div>
+
+        <div class="tg-block">
+            <h2>тг канал</h2>
+            <a href="https://t.me/+e7G65nv_e4c4ZjFi" target="_blank">https://t.me/+e7G65nv_e4c4ZjFi</a>
+        </div>
+
+        <a href="#" class="back-link" onclick="goBack()">назад</a>
     </article>
 
-    <article id="links" class="content hidden">
-        <h2>ссылки</h2>
-        <a href="https://t.me/+e7G65nv_e4c4ZjFi" target="_blank">ТГ канал</a>
-        <a href="mailto:deniskan11051998@gmail.com">Почта</a>
-        <a href="#" class="back-link" onclick="goBack()">Назад</a>
-    </article>
+    <div class="notification" id="notification">сообщение уехало!</div>
 
     <script>
         let scrollPosition = 0;
@@ -246,7 +300,7 @@
         async function loadText(filePath, elementId) {
             try {
                 const response = await fetch(filePath);
-                if (!response.ok) throw new Error('Ошибка загрузки файла');
+                if (!response.ok) throw new Error('ошибка загрузки файла');
                 const text = await response.text();
 
                 const formattedText = text
@@ -256,8 +310,8 @@
 
                 document.getElementById(elementId).innerHTML = formattedText;
             } catch (error) {
-                console.error('Ошибка:', error);
-                document.getElementById(elementId).innerHTML = 'Ошибка загрузки текста.';
+                console.error('ошибка:', error);
+                document.getElementById(elementId).innerHTML = 'ошибка загрузки текста.';
             }
         }
 
@@ -289,21 +343,40 @@
             window.scrollTo(0, scrollPosition);
         }
 
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        const textarea = document.querySelector('textarea[name="message"]');
+        const limitMessage = document.querySelector('.limit-message');
+
+        textarea.addEventListener('input', () => {
+            if (textarea.value.length >= 300) {
+                limitMessage.classList.remove('hidden');
+            } else {
+                limitMessage.classList.add('hidden');
+            }
+        });
+
         document.getElementById('telegramForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
             const captcha = document.querySelector('input[name="captcha"]').value;
             if (captcha !== '13') {
-                alert('Ошибка: Неправильно введена капча.');
+                showNotification('ошибка: неправильно введена капча.');
                 return;
             }
 
             const who = document.querySelector('input[name="who"]').value;
             const message = document.querySelector('textarea[name="message"]').value;
 
-            const text = `Господин Кан! Вам сообщение от *${who}*.
-
-${message}`;
+            const text = `*${who}*\n\n${message}`;
 
             fetch(`https://api.telegram.org/bot8065450134:AAG-ddB-us3DxGSQnoAuYH6kBnapG448dak/sendMessage`, {
                 method: 'POST',
@@ -316,10 +389,11 @@ ${message}`;
             }).then(response => response.json())
               .then(data => {
                   if (data.ok) {
-                      alert('Сообщение отправлено!');
-                      window.location.reload();
+                      showNotification('сообщение уехало!');
+                      document.getElementById('telegramForm').reset();
+                      loadContent('contact');
                   } else {
-                      alert('Ошибка при отправке сообщения.');
+                      showNotification('ошибка при отправке сообщения.');
                   }
               });
         });
