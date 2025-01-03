@@ -72,7 +72,7 @@
                 transform: translateY(-5px);
             }
         }
-        .header, .content, .who-block, .footer {
+        .header, .content, .who-block, .footer, .contact-form {
             width: 100%;
             box-sizing: border-box;
             position: relative;
@@ -93,6 +93,66 @@
         .footer {
             background-color: #555;
             overflow: hidden; /* Для анимации свечения */
+        }
+        .contact-form {
+            background-color: #666;
+            text-align: center;
+        }
+        .contact-form h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-transform: none;
+        }
+        .contact-form input,
+        .contact-form textarea {
+            width: 80%;
+            max-width: 500px;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: #444;
+            color: #fff;
+            border: none;
+        }
+        .contact-form textarea {
+            height: 150px;
+            resize: vertical;
+        }
+        .contact-form .captcha {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .contact-form .captcha label {
+            font-size: 1rem;
+            white-space: nowrap;
+        }
+        .contact-form .captcha input {
+            width: 100px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: #444;
+            color: #fff;
+            border: none;
+        }
+        .contact-form button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #fff;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .contact-form button:hover {
+            background-color: #ddd;
         }
         .header h1 {
             font-size: 2.5rem;
@@ -209,6 +269,20 @@
         <p><a href="mailto:deniskan11051998@gmail.com">Почта</a></p>
     </div>
 
+    <!-- Блок "Написать мне" -->
+    <div class="contact-form">
+        <h2>написать мне</h2>
+        <form id="telegramForm">
+            <input type="text" name="who" placeholder="кто" required><br>
+            <textarea name="message" placeholder="чё" required></textarea><br>
+            <div class="captcha">
+                <label for="captcha">капча: 7 * 2 - 1 = </label>
+                <input type="text" id="captcha" name="captcha" required>
+            </div>
+            <button type="submit">отправить</button>
+        </form>
+    </div>
+
     <!-- Стрелочка "наверх" -->
     <div class="back-to-top"></div>
 
@@ -265,6 +339,49 @@
 
         // Вызываем функцию при загрузке страницы
         revealContent();
+
+        // Токен вашего бота и ваш chat_id
+        const botToken = '8065450134:AAG-ddB-us3DxGSQnoAuYH6kBnapG448dak'; // Токен бота
+        const chatId = '430173926'; // Ваш chat_id
+
+        // Обработчик отправки формы
+        document.getElementById('telegramForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Отменяем стандартную отправку формы
+
+            // Получаем данные из формы
+            const who = document.querySelector('input[name="who"]').value;
+            const message = document.querySelector('textarea[name="message"]').value;
+            const captcha = document.querySelector('input[name="captcha"]').value;
+
+            // Проверка капчи
+            if (captcha !== '13') {
+                alert('Ошибка: Неправильно введена капча.');
+                return;
+            }
+
+            // Формируем текст сообщения с жирным шрифтом для "кто"
+            const text = `Господин Кан! Вам сообщение от *${who}*.\n\n${message}`;
+
+            // Отправляем сообщение через Telegram API
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: text,
+                    parse_mode: 'Markdown' // Для жирного текста
+                })
+            }).then(response => response.json())
+              .then(data => {
+                  if (data.ok) {
+                      alert('Сообщение отправлено!');
+                  } else {
+                      alert('Ошибка при отправке сообщения.');
+                  }
+              });
+        });
     </script>
 </body>
 </html>
