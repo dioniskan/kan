@@ -12,7 +12,7 @@
             --secondary-color: #ccc;
             --hover-color: #444;
             --highlight-color: #ddd;
-            --border-color: #666; /* Новый цвет для границ */
+            --border-color: #666;
         }
 
         body {
@@ -130,8 +130,8 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            margin: 0 auto; /* Центрирование кнопки */
-            display: block; /* Чтобы кнопка занимала всю ширину */
+            margin: 0 auto;
+            display: block;
         }
 
         .content button:hover {
@@ -198,23 +198,13 @@
             z-index: 1000;
         }
 
-        /* Новые стили для блоков на странице "связь" */
-        .contact-block {
+        .contact-block,
+        .tg-block,
+        .time-block {
             border: 1px solid var(--border-color);
             border-radius: 10px;
             padding: 20px;
             margin-bottom: 20px;
-        }
-
-        .contact-block h2 {
-            margin-top: 0;
-        }
-
-        .tg-block {
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
         }
 
         .tg-block a {
@@ -227,13 +217,85 @@
             text-decoration: underline;
         }
 
+        .time-counter {
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .time-counter h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            font-weight: normal;
+            color: #a0a0a0;
+        }
+
+        .time-counter .date-time {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-color);
+        }
+
+        .time-counter .time-block {
+            font-size: 18px;
+            margin: 12px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .time-counter .time-block .label {
+            text-align: right;
+            flex: 1;
+            padding-right: 10px;
+            color: #a0a0a0;
+        }
+
+        .time-counter .time-block .value {
+            text-align: left;
+            flex: 1;
+            padding-left: 10px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        @media (max-width: 600px) {
+            .time-counter {
+                padding: 15px;
+                width: 85%;
+            }
+            .time-counter h2 {
+                font-size: 16px;
+                margin-bottom: 15px;
+            }
+            .time-counter .date-time {
+                font-size: 16px;
+                margin-bottom: 15px;
+            }
+            .time-counter .time-block {
+                font-size: 16px;
+                margin: 10px 0;
+            }
+            .time-counter .time-block .label,
+            .time-counter .time-block .value {
+                padding: 0 5px;
+            }
+        }
+
         @media (max-width: 480px) {
             .content input,
             .content textarea,
             .captcha {
                 width: calc(100% - 40px);
             }
-
             .captcha input {
                 width: calc(100% - 120px);
             }
@@ -255,6 +317,7 @@
         <div class="tile" onclick="loadContent('who')">кто?</div>
         <div class="tile" onclick="window.open('source/other/Resume Kan Denis Vladislavovich (11.05.1998).pdf', '_blank')">резюме</div>
         <div class="tile" onclick="loadContent('contact')">связь</div>
+        <div class="tile" onclick="loadContent('time')">время</div>
     </section>
 
     <article id="what" class="content hidden">
@@ -292,22 +355,74 @@
         <a href="#" class="back-link" onclick="goBack()">назад</a>
     </article>
 
+    <article id="time" class="content hidden">
+        <div class="time-counter">
+            <h2>прожито от</h2>
+            <div class="date-time">11.05.1998 (4:48)</div>
+            <div class="time-block">
+                <div class="label">лет:</div>
+                <div class="value" id="years"></div>
+            </div>
+            <div class="time-block">
+                <div class="label">месяцев:</div>
+                <div class="value" id="months"></div>
+            </div>
+            <div class="time-block">
+                <div class="label">недель:</div>
+                <div class="value" id="weeks"></div>
+            </div>
+            <div class="time-block">
+                <div class="label">дней:</div>
+                <div class="value" id="days"></div>
+            </div>
+            <div class="time-block">
+                <div class="label">часов:</div>
+                <div class="value" id="hours"></div>
+            </div>
+        </div>
+        <a href="#" class="back-link" onclick="goBack()">назад</a>
+    </article>
+
     <div class="notification" id="notification">сообщение уехало!</div>
 
     <script>
         let scrollPosition = 0;
+        const startDate = new Date(1998, 4, 11, 4, 48, 0);
+        const timeElements = {
+            years: document.getElementById('years'),
+            months: document.getElementById('months'),
+            weeks: document.getElementById('weeks'),
+            days: document.getElementById('days'),
+            hours: document.getElementById('hours')
+        };
+        const timeUnits = {
+            hours: 1000 * 60 * 60,
+            days: 1000 * 60 * 60 * 24,
+            weeks: 1000 * 60 * 60 * 24 * 7,
+            months: 1000 * 60 * 60 * 24 * 30.44,
+            years: 1000 * 60 * 60 * 24 * 365.25
+        };
+        const formatNumber = (num) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
+        function updateTime() {
+            const timeDiff = Date.now() - startDate;
+            if (timeElements.years) timeElements.years.textContent = formatNumber((timeDiff / timeUnits.years).toFixed(1));
+            if (timeElements.months) timeElements.months.textContent = formatNumber((timeDiff / timeUnits.months).toFixed(1));
+            if (timeElements.weeks) timeElements.weeks.textContent = formatNumber((timeDiff / timeUnits.weeks).toFixed(1));
+            if (timeElements.days) timeElements.days.textContent = formatNumber((timeDiff / timeUnits.days).toFixed(1));
+            if (timeElements.hours) timeElements.hours.textContent = formatNumber((timeDiff / timeUnits.hours).toFixed(1));
+            requestAnimationFrame(updateTime);
+        }
 
         async function loadText(filePath, elementId) {
             try {
                 const response = await fetch(filePath);
                 if (!response.ok) throw new Error('ошибка загрузки файла');
                 const text = await response.text();
-
                 const formattedText = text
                     .split('\n')
                     .map(line => line.trim() === '' ? '<br>' : line)
                     .join('<br>');
-
                 document.getElementById(elementId).innerHTML = formattedText;
             } catch (error) {
                 console.error('ошибка:', error);
@@ -317,24 +432,21 @@
 
         function loadContent(page) {
             scrollPosition = window.scrollY;
-
             document.querySelectorAll('.content').forEach(el => el.classList.add('hidden'));
+
+            document.querySelector('.image-section').style.display = 'none';
+            document.querySelector('.text-section').style.display = 'none';
+            document.querySelector('.tiles').style.display = 'none';
 
             if (page === 'main') {
                 document.querySelector('.image-section').style.display = 'flex';
                 document.querySelector('.text-section').style.display = 'block';
                 document.querySelector('.tiles').style.display = 'flex';
             } else {
-                document.querySelector('.image-section').style.display = 'none';
-                document.querySelector('.text-section').style.display = 'none';
-                document.querySelector('.tiles').style.display = 'none';
                 document.getElementById(page).classList.remove('hidden');
-
-                if (page === 'what') {
-                    loadText('source/txt/what.txt', 'what-content');
-                } else if (page === 'who') {
-                    loadText('source/txt/who.txt', 'who-content');
-                }
+                if (page === 'what') loadText('source/txt/what.txt', 'what-content');
+                else if (page === 'who') loadText('source/txt/who.txt', 'who-content');
+                else if (page === 'time') console.log('Открываем счётчик времени'); // Для отладки
             }
         }
 
@@ -347,26 +459,21 @@
             const notification = document.getElementById('notification');
             notification.textContent = message;
             notification.style.display = 'block';
-
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 3000);
+            setTimeout(() => notification.style.display = 'none', 3000);
         }
 
         const textarea = document.querySelector('textarea[name="message"]');
         const limitMessage = document.querySelector('.limit-message');
 
-        textarea.addEventListener('input', () => {
-            if (textarea.value.length >= 300) {
-                limitMessage.classList.remove('hidden');
-            } else {
-                limitMessage.classList.add('hidden');
-            }
-        });
+        if (textarea) {
+            textarea.addEventListener('input', () => {
+                if (textarea.value.length >= 300) limitMessage.classList.remove('hidden');
+                else limitMessage.classList.add('hidden');
+            });
+        }
 
         document.getElementById('telegramForm').addEventListener('submit', function(event) {
             event.preventDefault();
-
             const captcha = document.querySelector('input[name="captcha"]').value;
             if (captcha !== '13') {
                 showNotification('ошибка: неправильно введена капча.');
@@ -375,7 +482,6 @@
 
             const who = document.querySelector('input[name="who"]').value;
             const message = document.querySelector('textarea[name="message"]').value;
-
             const text = `*${who}*\n\n${message}`;
 
             fetch(`https://api.telegram.org/bot8065450134:AAG-ddB-us3DxGSQnoAuYH6kBnapG448dak/sendMessage`, {
@@ -397,6 +503,8 @@
                   }
               });
         });
+
+        requestAnimationFrame(updateTime);
     </script>
 </body>
 </html>
