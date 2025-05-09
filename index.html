@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Страничка кана</title>
+    <title>Страничка Кана</title>
     <link rel="icon" href="source/images/kan-b.jpg" type="image/jpg">
     <style>
         :root {
@@ -300,6 +300,17 @@
                 width: calc(100% - 120px);
             }
         }
+    
+        .int-part {
+            font-weight: bold;
+            font-size: 1em;
+        }
+
+        .frac-part {
+            font-weight: normal;
+            font-size: 0.85em;
+            opacity: 0.8;
+        }
     </style>
 </head>
 <body>
@@ -405,15 +416,17 @@
     const formatNumber = (num) => {
     const [intPart, fracPart] = num.toString().split('.');
     const spacedInt = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-    return fracPart ? `${spacedInt}.${fracPart}` : spacedInt;
+    return fracPart
+        ? `<span class="int-part">${spacedInt}</span><span class="frac-part">.${fracPart}</span>`
+        : `<span class="int-part">${spacedInt}</span>`;
 };
     function updateTime() {
     const timeDiff = Date.now() - startDate;
-    if (timeElements.years) timeElements.years.textContent = formatNumber((timeDiff / timeUnits.years).toFixed(7));
-    if (timeElements.months) timeElements.months.textContent = formatNumber((timeDiff / timeUnits.months).toFixed(6));
-    if (timeElements.weeks) timeElements.weeks.textContent = formatNumber((timeDiff / timeUnits.weeks).toFixed(5));
-    if (timeElements.days) timeElements.days.textContent = formatNumber((timeDiff / timeUnits.days).toFixed(4));
-    if (timeElements.hours) timeElements.hours.textContent = formatNumber((timeDiff / timeUnits.hours).toFixed(3));
+    if (timeElements.years) timeElements.years.innerHTML = formatNumber((timeDiff / timeUnits.years).toFixed(7));
+    if (timeElements.months) timeElements.months.innerHTML = formatNumber((timeDiff / timeUnits.months).toFixed(6));
+    if (timeElements.weeks) timeElements.weeks.innerHTML = formatNumber((timeDiff / timeUnits.weeks).toFixed(5));
+    if (timeElements.days) timeElements.days.innerHTML = formatNumber((timeDiff / timeUnits.days).toFixed(4));
+    if (timeElements.hours) timeElements.hours.innerHTML = formatNumber((timeDiff / timeUnits.hours).toFixed(3));
     requestAnimationFrame(updateTime);
 }
 
