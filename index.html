@@ -386,125 +386,128 @@
     <div class="notification" id="notification">сообщение уехало!</div>
 
     <script>
-        let scrollPosition = 0;
-        const startDate = new Date(1998, 4, 11, 4, 48, 0);
-        const timeElements = {
-            years: document.getElementById('years'),
-            months: document.getElementById('months'),
-            weeks: document.getElementById('weeks'),
-            days: document.getElementById('days'),
-            hours: document.getElementById('hours')
-        };
-        const timeUnits = {
-            hours: 1000 * 60 * 60,
-            days: 1000 * 60 * 60 * 24,
-            weeks: 1000 * 60 * 60 * 24 * 7,
-            months: 1000 * 60 * 60 * 24 * 30.44,
-            years: 1000 * 60 * 60 * 24 * 365.25
-        };
-        const formatNumber = (num) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    let scrollPosition = 0;
+    const startDate = new Date(1998, 4, 11, 4, 48, 0);
+    const timeElements = {
+        years: document.getElementById('years'),
+        months: document.getElementById('months'),
+        weeks: document.getElementById('weeks'),
+        days: document.getElementById('days'),
+        hours: document.getElementById('hours')
+    };
+    const timeUnits = {
+        hours: 1000 * 60 * 60,
+        days: 1000 * 60 * 60 * 24,
+        weeks: 1000 * 60 * 60 * 24 * 7,
+        months: 1000 * 60 * 60 * 24 * 30.44,
+        years: 1000 * 60 * 60 * 24 * 365.25
+    };
+    const formatNumber = (num) => {
+    const [intPart, fracPart] = num.toString().split('.');
+    const spacedInt = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    return fracPart ? `${spacedInt}.${fracPart}` : spacedInt;
+};
+    function updateTime() {
+    const timeDiff = Date.now() - startDate;
+    if (timeElements.years) timeElements.years.textContent = formatNumber((timeDiff / timeUnits.years).toFixed(7));
+    if (timeElements.months) timeElements.months.textContent = formatNumber((timeDiff / timeUnits.months).toFixed(6));
+    if (timeElements.weeks) timeElements.weeks.textContent = formatNumber((timeDiff / timeUnits.weeks).toFixed(5));
+    if (timeElements.days) timeElements.days.textContent = formatNumber((timeDiff / timeUnits.days).toFixed(4));
+    if (timeElements.hours) timeElements.hours.textContent = formatNumber((timeDiff / timeUnits.hours).toFixed(3));
+    requestAnimationFrame(updateTime);
+}
 
-        function updateTime() {
-            const timeDiff = Date.now() - startDate;
-            if (timeElements.years) timeElements.years.textContent = formatNumber((timeDiff / timeUnits.years).toFixed(1));
-            if (timeElements.months) timeElements.months.textContent = formatNumber((timeDiff / timeUnits.months).toFixed(1));
-            if (timeElements.weeks) timeElements.weeks.textContent = formatNumber((timeDiff / timeUnits.weeks).toFixed(1));
-            if (timeElements.days) timeElements.days.textContent = formatNumber((timeDiff / timeUnits.days).toFixed(1));
-            if (timeElements.hours) timeElements.hours.textContent = formatNumber((timeDiff / timeUnits.hours).toFixed(1));
-            requestAnimationFrame(updateTime);
+    async function loadText(filePath, elementId) {
+        try {
+            const response = await fetch(filePath);
+            if (!response.ok) throw new Error('ошибка загрузки файла');
+            const text = await response.text();
+            const formattedText = text
+                .split('\n')
+                .map(line => line.trim() === '' ? '<br>' : line)
+                .join('<br>');
+            document.getElementById(elementId).innerHTML = formattedText;
+        } catch (error) {
+            console.error('ошибка:', error);
+            document.getElementById(elementId).innerHTML = 'ошибка загрузки текста.';
         }
+    }
 
-        async function loadText(filePath, elementId) {
-            try {
-                const response = await fetch(filePath);
-                if (!response.ok) throw new Error('ошибка загрузки файла');
-                const text = await response.text();
-                const formattedText = text
-                    .split('\n')
-                    .map(line => line.trim() === '' ? '<br>' : line)
-                    .join('<br>');
-                document.getElementById(elementId).innerHTML = formattedText;
-            } catch (error) {
-                console.error('ошибка:', error);
-                document.getElementById(elementId).innerHTML = 'ошибка загрузки текста.';
-            }
+    function loadContent(page) {
+        scrollPosition = window.scrollY;
+        document.querySelectorAll('.content').forEach(el => el.classList.add('hidden'));
+
+        document.querySelector('.image-section').style.display = 'none';
+        document.querySelector('.text-section').style.display = 'none';
+        document.querySelector('.tiles').style.display = 'none';
+
+        if (page === 'main') {
+            document.querySelector('.image-section').style.display = 'flex';
+            document.querySelector('.text-section').style.display = 'block';
+            document.querySelector('.tiles').style.display = 'flex';
+        } else {
+            document.getElementById(page).classList.remove('hidden');
+            if (page === 'what') loadText('source/txt/what.txt', 'what-content');
+            else if (page === 'who') loadText('source/txt/who.txt', 'who-content');
+            else if (page === 'time') console.log('Открываем счётчик времени');
         }
+    }
 
-        function loadContent(page) {
-            scrollPosition = window.scrollY;
-            document.querySelectorAll('.content').forEach(el => el.classList.add('hidden'));
+    function goBack() {
+        loadContent('main');
+        window.scrollTo(0, scrollPosition);
+    }
 
-            document.querySelector('.image-section').style.display = 'none';
-            document.querySelector('.text-section').style.display = 'none';
-            document.querySelector('.tiles').style.display = 'none';
+    function showNotification(message) {
+        const notification = document.getElementById('notification');
+        notification.textContent = message;
+        notification.style.display = 'block';
+        setTimeout(() => notification.style.display = 'none', 3000);
+    }
 
-            if (page === 'main') {
-                document.querySelector('.image-section').style.display = 'flex';
-                document.querySelector('.text-section').style.display = 'block';
-                document.querySelector('.tiles').style.display = 'flex';
-            } else {
-                document.getElementById(page).classList.remove('hidden');
-                if (page === 'what') loadText('source/txt/what.txt', 'what-content');
-                else if (page === 'who') loadText('source/txt/who.txt', 'who-content');
-                else if (page === 'time') console.log('Открываем счётчик времени'); // Для отладки
-            }
-        }
+    const textarea = document.querySelector('textarea[name="message"]');
+    const limitMessage = document.querySelector('.limit-message');
 
-        function goBack() {
-            loadContent('main');
-            window.scrollTo(0, scrollPosition);
-        }
-
-        function showNotification(message) {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.style.display = 'block';
-            setTimeout(() => notification.style.display = 'none', 3000);
-        }
-
-        const textarea = document.querySelector('textarea[name="message"]');
-        const limitMessage = document.querySelector('.limit-message');
-
-        if (textarea) {
-            textarea.addEventListener('input', () => {
-                if (textarea.value.length >= 300) limitMessage.classList.remove('hidden');
-                else limitMessage.classList.add('hidden');
-            });
-        }
-
-        document.getElementById('telegramForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const captcha = document.querySelector('input[name="captcha"]').value;
-            if (captcha !== '13') {
-                showNotification('ошибка: неправильно введена капча.');
-                return;
-            }
-
-            const who = document.querySelector('input[name="who"]').value;
-            const message = document.querySelector('textarea[name="message"]').value;
-            const text = `*${who}*\n\n${message}`;
-
-            fetch(`https://api.telegram.org/bot8065450134:AAG-ddB-us3DxGSQnoAuYH6kBnapG448dak/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: '430173926',
-                    text: text,
-                    parse_mode: 'Markdown'
-                })
-            }).then(response => response.json())
-              .then(data => {
-                  if (data.ok) {
-                      showNotification('сообщение уехало!');
-                      document.getElementById('telegramForm').reset();
-                      loadContent('contact');
-                  } else {
-                      showNotification('ошибка при отправке сообщения.');
-                  }
-              });
+    if (textarea) {
+        textarea.addEventListener('input', () => {
+            if (textarea.value.length >= 300) limitMessage.classList.remove('hidden');
+            else limitMessage.classList.add('hidden');
         });
+    }
 
-        requestAnimationFrame(updateTime);
-    </script>
+    document.getElementById('telegramForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const captcha = document.querySelector('input[name="captcha"]').value;
+        if (captcha !== '13') {
+            showNotification('ошибка: неправильно введена капча.');
+            return;
+        }
+
+        const who = document.querySelector('input[name="who"]').value;
+        const message = document.querySelector('textarea[name="message"]').value;
+        const text = `*${who}*\n\n${message}`;
+
+        fetch(`https://api.telegram.org/bot8065450134:AAG-ddB-us3DxGSQnoAuYH6kBnapG448dak/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id: '430173926',
+                text: text,
+                parse_mode: 'Markdown'
+            })
+        }).then(response => response.json())
+          .then(data => {
+              if (data.ok) {
+                  showNotification('сообщение уехало!');
+                  document.getElementById('telegramForm').reset();
+                  loadContent('contact');
+              } else {
+                  showNotification('ошибка при отправке сообщения.');
+              }
+          });
+    });
+
+    requestAnimationFrame(updateTime);
+</script>
 </body>
 </html>
